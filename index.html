@@ -13,7 +13,7 @@
 <body class="bg-light">
 
   <div class="p-2 text-light text-start" style="background-color:  #0b5987;">
-    <h1>Chessoku</h1> 
+   <img src="ChessOku.png" class="img-fluid" alt="chessOku" style="height : 64px; width : auto;" /> 
   </div>
   
   <div class="container mt-4">
@@ -48,8 +48,8 @@
           <div class="card-body">
             <h5 class="card-title"> Upload image to extract FEN </h5>
             <input accept="image/*"  class="d-none" type='file' id="imgInp" />
-            <label class="btn btn-primary" for="imgInp"> Select Image </label>
-            <img id="subjectImg" src="#" alt="your image" class="d-none" />
+            <label class="btn btn-lg btn-block text-light" style="background-color:  #0b5987;" for="imgInp"> Select Image </label>
+           
           </div>
         </div>
         
@@ -63,9 +63,11 @@
 
 
   </div>
+  <img id="subjectImg" src="" alt="your image" class="d-block my-2 img-fluid img-thumbnail" style="width: auto; height: auto; visibility: hidden;" />
   <script type="module">
 
-   import {getFen} from './chessoko.js';
+  import {getFen} from './chessoko.js';
+  import {INPUT_EVENT_TYPE, COLOR, Chessboard, MARKER_TYPE} from "/cm-chessboard/src/cm-chessboard/Chessboard.js";
 
    imgInp.onchange = evt => {
     const [file] = imgInp.files
@@ -74,11 +76,16 @@
     }
 
     function cb (fen) {
-      // alert(fen);
+console.log("In the callback " + fen);
+
+      // fen = "4r3/8/2p2PPk/1p6/pP2p1R1/P1B5/2P2K2/3r4 w - - 1 45";
+
       board.setPosition(fen);
+
       copyFen.innerHTML = "Copy FEN";
-
-
+      fenString.value = fen;
+      // chess.load(fen + "w - - 1 1");
+      chess.load(fen + " w - - 1 45");
     }
 
     subjectImg.onload = () => {
@@ -87,9 +94,9 @@
 
   }
 
-  import {INPUT_EVENT_TYPE, COLOR, Chessboard, MARKER_TYPE} from "/cm-chessboard/src/cm-chessboard/Chessboard.js"
 
-const chess = new Chess()
+
+const chess = new Chess();
 
 function inputHandler(event) {
     // console.log("event", event)
@@ -109,7 +116,8 @@ function inputHandler(event) {
         if (result) {
             event.chessboard.removeMarkers(undefined, MARKER_TYPE.square)
             // event.chessboard.disableMoveInput()
-            event.chessboard.setPosition(chess.fen())
+            event.chessboard.setPosition(chess.fen());
+            fenString.value = chess.fen();
             // const possibleMoves = chess.moves({verbose: true})
             // if (possibleMoves.length > 0) {
             //     const randomIndex = Math.floor(Math.random() * possibleMoves.length)
@@ -137,10 +145,10 @@ const board = new Chessboard(document.getElementById("board"), {
 board.enableMoveInput(inputHandler, COLOR.white)
 </script>
 
-<script>
+<script type="module">
   copyFen.onclick = function () {
   /* Get the text field */
-  var copyText = document.getElementById("myInput");
+  var copyText = document.getElementById("fenString");
 
   /* Select the text field */
   copyText.select();

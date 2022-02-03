@@ -1,5 +1,6 @@
 
   import Filters from "./filters.js";
+  import wbe from "./wbe.js";
 
   export  function runFilter(id, filter, arg1, arg2, arg3) {
     var c = document.getElementById("myCanvas");
@@ -62,11 +63,11 @@
 
   export function whiteP(img) {
     var pixelData = Filters.getPixels(img);
-    return Filters.whitePercentage(pixelData);
+    return wbe.whitePercentage(pixelData);
 
   }
 
   export function blackP(img) {
         var pixelData = Filters.getPixels(img);
-    return Filters.blackPercentage(pixelData);
+    return wbe.blackPercentage(pixelData);
   }

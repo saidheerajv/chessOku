@@ -18,7 +18,9 @@ var wbe = {};
     }
   
     var cP = ((c*4)/d.length)*100;
-    return cP;
+    cP = cP.toFixed(2);
+
+    return parseInt(cP);
   
   }
   
@@ -32,7 +34,7 @@ var wbe = {};
       var g = d[i+1];
       var b = d[i+2];
   
-      if(r < 10 && g < 10 && b < 10) {
+      if(r == 0 && g == 0 && b == 0) {
         c++;
        
       }
@@ -40,9 +42,15 @@ var wbe = {};
     }
   
     var cP = ((c*4)/d.length)*100;
-  
-    return cP;
+    cP = cP.toFixed(2);
+
+    return parseInt(cP);
+    // return cP;
   }
-  export function whiteBlackEmpty() {
+  
+  wbe.whiteBlackEmpty = function(pixels) {
 
   }
+
+
+  export default wbe;
