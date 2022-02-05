@@ -1,6 +1,6 @@
 # chessOku
 
-chessOko takes an image of 2D chessboard and input and detects the positions of each pieces and plots them on a playable board. 
+chessOku takes an image of 2D chessboard and input and detects the positions of each pieces and plots them on a playable board. 
 
 ## Open sources used
 
