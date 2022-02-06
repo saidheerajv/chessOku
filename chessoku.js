@@ -1,16 +1,13 @@
 import { runFilter, threshold, edgeDetection, inRange, sharpen, grayscale, brightness, contrast, whiteP, blackP } from './imageMethods.js';
 
 
-/* For testing
- $("#go-one").on("click", goOne);
-
- function goOne() {
-   getSquare($("#f1").val(), $("#f2").val()).then(function (result) {    
+// For testing
+ function goOne(i, j) {
+   getSquare(i, j).then(function (result) {    
      console.log(result);            
    });
  }
 
-*/
 
 var processedImg = document.createElement("IMG");
 processedImg.id = "binaryImg";
@@ -22,26 +19,20 @@ var fen = Array.from(Array(8), () => new Array(8));
 var iteration = 0;
 
 
-
 export function getFen(subjectImage = "c-image", callbackFunction) {
 
   var img = document.getElementById(subjectImage);
-  
-
 
   var contrastedImg = document.createElement("IMG");
   contrastedImg.src = contrast(img);
 
   contrastedImg.onload = function () {
-
     processedImg.src = threshold(contrastedImg);
   }
 
 
   pieceImg.src = edgeDetection(img);
-
   processedImg.onload = function () {
-  
   }
 
   pieceImg.onload = function () {
@@ -67,13 +58,13 @@ function hit(ImageElementId = "c-image", callback) { // loop should be written h
     for (var i = 0; i < 8; i++) {
       for (var j = 0; j < 8; j++) {
         getSquare(i, j).then(function (result) {
-        
+
 
           fen[result[0]][result[1]] = result[2];
           iteration++;
-        
+
           if (iteration > 63) {
-            
+
             processFen(fen, callback);
           }
 
@@ -123,7 +114,7 @@ async function getSquare(i, j) {
             piece = result[0].label;
 
 
-            if(bp > wp) {
+            if (bp > wp) {
               piece = piece.toLowerCase();
             }
 
@@ -164,24 +155,6 @@ function getClippedRegion(image, x, y, width, height) {
 }
 
 
-
-
-// // Make a prediction with a selected image
-// async function predictPiece(img1) {
-//  var tempImg1 = document.createElement("IMG");
-//  tempImg1.src = img1;
-//   var piece = "0";
-//   var guess1 = await classifier.classify(tempImg1, (err, results) => {
-//       piece = results[0].label;
-//       // console.log(piece);
-//   });
-
-//   return piece;
-
-// }
-
-
-
 function processFen(fenArray, callback) {
   var fenStr = "";
 
@@ -204,7 +177,6 @@ function processFen(fenArray, callback) {
     fenStr = fenStr.replace(item.toString(), item.toString().length);
   });
 
-  // console.log("https://lichess.org/editor" + fenStr + "_w_KQkq_-_0_1");
   callback(fenStr);
 }
 

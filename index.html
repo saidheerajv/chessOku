@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <title>Chessoku - Get FEN from any image</title>
+  <title>Chessoku - Get FEN from 2D chess game image</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -10,12 +11,13 @@
   <script src="ml5.min.js"></script>
   <script src="chess.js"></script>
 </head>
+
 <body class="bg-light">
 
   <div class="p-2 text-light text-start" style="background-color:  #0b5987;">
-   <img src="ChessOku.png" class="img-fluid" alt="chessOku" style="height : 64px; width : auto;" /> 
+    <img src="ChessOku.png" class="img-fluid" alt="chessOku" style="height : 64px; width : auto;" />
   </div>
-  
+
   <div class="container mt-4">
     <div class="row">
 
@@ -29,8 +31,8 @@
           <div class="card-body">
             <h5 class="card-title"> FEN </h5>
 
-          <textarea class="form-control mb-2" id="fenString" rows="3"></textarea>
-          <button class="btn btn-outline-primary" id="copyFen">Copy FEN</button> 
+            <textarea class="form-control mb-2" id="fenString" rows="3"></textarea>
+            <button class="btn btn-outline-primary" id="copyFen">Copy FEN</button>
           </div>
         </div>
 
@@ -38,8 +40,8 @@
         <div class="card my-3">
           <div class="card-body">
             <h5 class="card-title"> Continue in </h5>
-            <button class="btn text-white" id="chessdotcom" style="background-color: #7fa650;">chess.com</button>
-            <button class="btn text-white" id="lichessdotorg" style="background-color: #2e7cc5;">lichess.org</button>
+            <a class="btn text-white" id="chessdotcom" target="_blank" style="background-color: #7fa650;">chess.com</a>
+            <a class="btn text-white" id="lichessdotorg" target="_blank" style="background-color: #2e7cc5;">lichess.org</a>
           </div>
         </div>
 
@@ -47,117 +49,117 @@
         <div class="card my-3">
           <div class="card-body">
             <h5 class="card-title"> Upload image to extract FEN </h5>
-            <input accept="image/*"  class="d-none" type='file' id="imgInp" />
-            <label class="btn btn-lg btn-block text-light" style="background-color:  #0b5987;" for="imgInp"> Select Image </label>
-           
+            <input accept="image/*" class="d-none" type='file' id="imgInp" />
+            <label class="btn btn-lg btn-block text-light" style="background-color:  #0b5987;" for="imgInp"> Select
+              Image </label>
+
           </div>
         </div>
-        
+
         <div>
+
+        </div>
 
       </div>
 
     </div>
 
-    </div>
-
 
   </div>
-  <img id="subjectImg" src="" alt="your image" class="d-block my-2 img-fluid img-thumbnail" style="width: auto; height: auto; visibility: hidden;" />
+  <img id="subjectImg" src="" alt="your image" class="d-block my-2 img-fluid img-thumbnail"
+    style="width: auto; height: auto; visibility: hidden;" />
   <script type="module">
 
-  import {getFen} from './chessoko.js';
-  import {INPUT_EVENT_TYPE, COLOR, Chessboard, MARKER_TYPE} from "/cm-chessboard/src/cm-chessboard/Chessboard.js";
+    import { getFen } from './chessoku.js';
+    import { INPUT_EVENT_TYPE, COLOR, Chessboard, MARKER_TYPE } from "/cm-chessboard/src/cm-chessboard/Chessboard.js";
 
-   imgInp.onchange = evt => {
-    const [file] = imgInp.files
-    if (file) {
-      subjectImg.src = URL.createObjectURL(file)
+    imgInp.onchange = evt => {
+      const [file] = imgInp.files
+      if (file) {
+        subjectImg.src = URL.createObjectURL(file)
+      }
+
+      function cb(fen) {
+        board.setPosition(fen);
+
+        copyFen.innerHTML = "Copy FEN";
+        fen = fen + " w - - 1 45";
+        fenString.value = fen;
+        chessdotcom.href = fen;
+        lichessdotorg.href = fen;
+
+        // console.log("https://lichess.org/editor" + fenStr + "_w_KQkq_-_0_1");
+        // console.log("https://lichess.org/editor" + fenStr + "_w_KQkq_-_0_1");
+      }
+      subjectImg.onload = () => {
+        getFen("subjectImg", cb);
+      };
+
     }
 
-    function cb (fen) {
-console.log("In the callback " + fen);
+    const chess = new Chess();
 
-      // fen = "4r3/8/2p2PPk/1p6/pP2p1R1/P1B5/2P2K2/3r4 w - - 1 45";
-
-      board.setPosition(fen);
-
-      copyFen.innerHTML = "Copy FEN";
-      fenString.value = fen;
-      // chess.load(fen + "w - - 1 1");
-      chess.load(fen + " w - - 1 45");
-    }
-
-    subjectImg.onload = () => {
-      getFen("subjectImg", cb);
-    };
-
-  }
-
-
-
-const chess = new Chess();
-
-function inputHandler(event) {
-    // console.log("event", event)
-    event.chessboard.removeMarkers(undefined, MARKER_TYPE.dot)
-    event.chessboard.removeMarkers(undefined, MARKER_TYPE.square)
-    if (event.type === INPUT_EVENT_TYPE.moveStart) {
-        const moves = chess.moves({square: event.square, verbose: true});
+    function inputHandler(event) {
+      // console.log("event", event)
+      event.chessboard.removeMarkers(undefined, MARKER_TYPE.dot)
+      event.chessboard.removeMarkers(undefined, MARKER_TYPE.square)
+      if (event.type === INPUT_EVENT_TYPE.moveStart) {
+        const moves = chess.moves({ square: event.square, verbose: true });
         event.chessboard.addMarker(event.square, MARKER_TYPE.square)
         for (const move of moves) {
-            event.chessboard.addMarker(move.to, MARKER_TYPE.dot)
+          event.chessboard.addMarker(move.to, MARKER_TYPE.dot)
         }
         return moves.length > 0
-    } else if (event.type === INPUT_EVENT_TYPE.moveDone) {
-        const move = {from: event.squareFrom, to: event.squareTo}
+      } else if (event.type === INPUT_EVENT_TYPE.moveDone) {
+        const move = { from: event.squareFrom, to: event.squareTo }
         const result = chess.move(move)
 
         if (result) {
-            event.chessboard.removeMarkers(undefined, MARKER_TYPE.square)
-            // event.chessboard.disableMoveInput()
-            event.chessboard.setPosition(chess.fen());
-            fenString.value = chess.fen();
-            // const possibleMoves = chess.moves({verbose: true})
-            // if (possibleMoves.length > 0) {
-            //     const randomIndex = Math.floor(Math.random() * possibleMoves.length)
-            //     const randomMove = possibleMoves[randomIndex]
-            //     setTimeout(() => { // smoother with 500ms delay
-            //         chess.move({from: randomMove.from, to: randomMove.to})
-                    event.chessboard.enableMoveInput(inputHandler, COLOR.black)
-            //         event.chessboard.setPosition(chess.fen())
-            //     }, 500)
-            // }
+          event.chessboard.removeMarkers(undefined, MARKER_TYPE.square)
+          // event.chessboard.disableMoveInput()
+          event.chessboard.setPosition(chess.fen());
+          fenString.value = chess.fen();
+          // const possibleMoves = chess.moves({verbose: true})
+          // if (possibleMoves.length > 0) {
+          //     const randomIndex = Math.floor(Math.random() * possibleMoves.length)
+          //     const randomMove = possibleMoves[randomIndex]
+          //     setTimeout(() => { // smoother with 500ms delay
+          //         chess.move({from: randomMove.from, to: randomMove.to})
+          event.chessboard.enableMoveInput(inputHandler, COLOR.black)
+          //         event.chessboard.setPosition(chess.fen())
+          //     }, 500)
+          // }
         } else {
-            console.warn("invalid move", move)
+          console.warn("invalid move", move)
         }
 
         return result;
+      }
     }
-}
 
-const board = new Chessboard(document.getElementById("board"), {
-    position: chess.fen(),
-    sprite: {url: "/cm-chessboard/assets/images/chessboard-sprite-staunty.svg"},
-    style: {moveFromMarker: undefined, moveToMarker: undefined}, // disable standard markers
-    orientation: COLOR.white
-})
-board.enableMoveInput(inputHandler, COLOR.white)
-</script>
+    const board = new Chessboard(document.getElementById("board"), {
+      position: chess.fen(),
+      sprite: { url: "/cm-chessboard/assets/images/chessboard-sprite-staunty.svg" },
+      style: { moveFromMarker: undefined, moveToMarker: undefined }, // disable standard markers
+      orientation: COLOR.white
+    })
+    board.enableMoveInput(inputHandler, COLOR.white)
+  </script>
 
-<script type="module">
-  copyFen.onclick = function () {
-  /* Get the text field */
-  var copyText = document.getElementById("fenString");
+  <script type="module">
+    copyFen.onclick = function () {
+      /* Get the text field */
+      var copyText = document.getElementById("fenString");
 
-  /* Select the text field */
-  copyText.select();
-  copyText.setSelectionRange(0, 99999); /* For mobile devices */
+      /* Select the text field */
+      copyText.select();
+      copyText.setSelectionRange(0, 99999); /* For mobile devices */
 
-   /* Copy the text inside the text field */
-  navigator.clipboard.writeText(copyText.value);
-    copyFen.innerHTML = "Copied";
-}
-</script>
+      /* Copy the text inside the text field */
+      navigator.clipboard.writeText(copyText.value);
+      copyFen.innerHTML = "Copied";
+    }
+  </script>
 </body>
+
 </html>
