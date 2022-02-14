@@ -70,7 +70,7 @@
     style="width: auto; height: auto; visibility: hidden;" />
   <script type="module">
 
-    import { getFen } from './chessoku.js';
+    import { getFen } from './chessoku/chessoku.js';
     import { INPUT_EVENT_TYPE, COLOR, Chessboard, MARKER_TYPE } from "/cm-chessboard/src/cm-chessboard/Chessboard.js";
 
     imgInp.onchange = evt => {
@@ -83,7 +83,7 @@
         board.setPosition(fen);
 
         copyFen.innerHTML = "Copy FEN";
-        fen = fen + " w - - 1 45";
+        fen = fen + " w KQkq - 0 0";
         fenString.value = fen;
         chessdotcom.href = fen;
         lichessdotorg.href = fen;
