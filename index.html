@@ -71,7 +71,7 @@
   <script type="module">
 
     import { getFen } from './chessoku/chessoku.js';
-    import { INPUT_EVENT_TYPE, COLOR, Chessboard, MARKER_TYPE } from "cm-chessboard/src/cm-chessboard/Chessboard.js";
+    import { INPUT_EVENT_TYPE, COLOR, Chessboard, MARKER_TYPE } from "./cm-chessboard/src/cm-chessboard/Chessboard.js";
 
     imgInp.onchange = evt => {
       const [file] = imgInp.files
@@ -139,7 +139,7 @@
 
     const board = new Chessboard(document.getElementById("board"), {
       position: chess.fen(),
-      sprite: { url: "cm-chessboard/assets/images/chessboard-sprite-staunty.svg" },
+      sprite: { url: "./cm-chessboard/assets/images/chessboard-sprite-staunty.svg" },
       style: { moveFromMarker: undefined, moveToMarker: undefined }, // disable standard markers
       orientation: COLOR.white
     })
