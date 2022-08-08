@@ -1,6 +1,7 @@
 # chessOku
 
 chessOku takes an image of 2D chessboard and input and detects the positions of each pieces and plots them on a playable board. 
+Demo - https://saidheerajv.github.io/chessOku/
 
 ## Open sources used
 
